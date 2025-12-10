@@ -10,3 +10,6 @@ Aquí está el tablero donde se gestionó el desarrollo del proyecto:
 🔗 Link al servidor: https://sergiobastiann.pythonanywhere.com/
 
 🔗 Link al usuario kinesiologo: https://sergiobastiann.pythonanywhere.com/usuarios/kine/login/
+
+Usuario kinesiologo: cristobal
+pass: nosenose12
