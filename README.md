@@ -7,3 +7,4 @@ Aquí está el tablero donde se gestionó el desarrollo del proyecto:
 
 🔗 Link al Trello: https://trello.com/b/KbYiYIqQ/proyecto-kinesiolgo
 
+🔗 Link al servidor: https://sergiobastiann.pythonanywhere.com/
