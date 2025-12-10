@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalle de Cita</title>
+</head>
+<body>
+    <h1>Detalle de Cita #{{ cita.pk }}</h1>
+    <p>Fecha y Hora: {{ cita.fecha_hora_inicio }}</p>
+    <p>Paciente: {{ cita.paciente }}</p>
+    <p>Motivo: {{ cita.motivo }}</p>
+    <p><a href="{% url 'cancelar_cita' cita.pk %}">Cancelar Cita</a></p>
+</body>
+</html>

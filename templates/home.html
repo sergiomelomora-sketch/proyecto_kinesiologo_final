@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<div class="text-center">
+  <h1 class="mb-3">Bienvenido a KineGestión</h1>
+  <p class="lead">Gestiona pacientes y agenda tus citas de forma sencilla.</p>
+  <a href="{% url 'citas:agenda' %}" class="btn btn-primary">Agendar cita</a>
+</div>
+{% endblock %}

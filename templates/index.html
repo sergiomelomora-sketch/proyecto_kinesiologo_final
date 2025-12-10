@@ -1,0 +1,313 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kinesiólogos - Recuperación y Bienestar</title>
+    <style>
+        
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+        .background-curve {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            
+            height: 40vh; 
+            background: linear-gradient(170deg, transparent 50%, #e0f7fa 50%);
+            z-index: -1;
+        }
+        
+        
+        .top-nav {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .top-link {
+            text-decoration: none;
+            color: #00bcd4;
+            font-weight: bold;
+            font-size: 0.9em;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .top-link:hover {
+            background-color: #e0f7fa;
+        }
+
+        
+        .main-hero-content {
+            max-width: 1000px;
+            height: 80vh; 
+            margin: 0 auto;
+            padding: 80px 30px 30px; 
+            display: flex;
+            align-items: center;
+        }
+        .left-content {
+            flex: 1;
+            padding-right: 50px;
+            display: flex;
+            align-items: center;
+        }
+        .right-content {
+            flex: 1;
+            padding-left: 50px;
+            text-align: left;
+        }
+        
+        
+        .title-kine {
+            color: #00bcd4;
+            font-size: 2.5em;
+            font-weight: 300;
+            border-bottom: 3px solid #e0f7fa;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .subtitle-action {
+            color: #333;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .text-detail {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .action-agenda {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #00bcd4;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 188, 212, 0.3);
+            transition: background-color 0.3s;
+        }
+        .action-agenda:hover {
+            background-color: #0097a7;
+        }
+        .image-placeholder {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            
+            content: url('https://placehold.co/600x400/00bcd4/FFFFFF/png?text=Kinesi%C3%B3logo+Experto');
+        }
+        .check-hour {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95em;
+            color: #607d8b;
+        }
+        .check-hour-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+            color: #607d8b;
+        }
+        .check-hour-link {
+            color: #607d8b;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        .check-hour-link:hover {
+            color: #455a64;
+        }
+
+        
+        .services-section {
+            max-width: 1000px;
+            margin: 0px auto 50px auto; 
+            padding: 50px 30px;
+            text-align: center;
+        }
+        .services-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 5px solid #00bcd4; 
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .service-icon {
+            font-size: 3em;
+            color: #00bcd4;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .service-card h4 {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .service-card p {
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        
+        @media (max-width: 768px) {
+            .main-hero-content {
+                flex-direction: column;
+                height: auto;
+                padding-top: 50px;
+            }
+            .left-content, .right-content {
+                flex: none;
+                padding: 0;
+                width: 100%;
+                text-align: center;
+            }
+            .left-content {
+                margin-bottom: 30px;
+            }
+            .title-kine {
+                font-size: 2em;
+            }
+            .check-hour {
+                justify-content: center;
+            }
+            .top-nav {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    
+    <div class="background-curve"></div>
+    
+    
+    <div class="top-nav">
+        {% if user.is_authenticated %}
+            <span style="color: #00bcd4; font-size: 0.9em;">Hola, {{ user.first_name|default:user.username }}</span>
+            <a href="{% url 'index' %}" class="top-link" style="background-color: #00bcd4; color: white;">
+                Mi Panel
+            </a>
+            <a href="{% url 'logout_view' %}" class="top-link">
+                Cerrar Sesión
+            </a>
+        {% else %}
+            <a href="{% url 'usuarios:autenticar_paciente' %}" class="top-link">
+                Iniciar Sesión
+            </a>
+            <a href="{% url 'usuarios:registro_paciente' %}" class="top-link" style="background-color: #00bcd4; color: white;">
+                Registrarse
+            </a>
+        {% endif %}
+    </div>
+
+    
+    <div class="main-hero-content">
+        <div class="left-content">
+            
+            <div class="image-placeholder"></div>
+        </div>
+
+        <div class="right-content">
+            <h1 class="title-kine">KINESIÓLOGOS</h1>
+            
+            <p class="subtitle-action">
+                La recuperación comienza con un pequeño paso.
+            </p>
+
+            <p class="text-detail" style="font-size: 0.9em;">
+                Hoy es el día de darlo. Atención personalizada y profesional en cada sesión.
+            </p>
+            
+            {% if not user.is_authenticated %}
+                <a href="{% url 'usuarios:autenticar_paciente' %}" class="action-agenda">
+                    Agenda Aquí
+                </a>
+            {% else %}
+                <a href="{% url 'citas:agendar' %}" class="action-agenda">
+                    Agendar Nueva Cita
+                </a>
+            {% endif %}
+
+            <div class="check-hour">
+                <span class="check-hour-icon">⏱️</span> 
+                <span>
+                    {% if user.is_authenticated %}
+                        ¿Quieres ver tus próximas citas? 
+                        <a href="{% url 'index' %}" class="check-hour-link">
+                            Ir a Mi Panel
+                        </a>
+                    {% else %}
+                        ¿Ya tienes una cita? 
+                        <a href="{% url 'usuarios:autenticar_paciente' %}" class="check-hour-link">
+                            Revisa tu hora aquí
+                        </a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="services-section">
+        <h2 class="services-title">Nuestros Servicios</h2>
+        <div class="services-grid">
+            
+            
+            <div class="service-card">
+                <span class="service-icon">🏋️</span>
+                <h4>Rehabilitación Deportiva</h4>
+                <p>Especialistas en la recuperación de lesiones atléticas, optimizando tu rendimiento y previniendo recaídas.</p>
+            </div>
+            
+            
+            <div class="service-card">
+                <span class="service-icon">👵</span>
+                <h4>Terapia Geriátrica</h4>
+                <p>Mejoramos la movilidad, el equilibrio y la fuerza para que los adultos mayores mantengan su independencia.</p>
+            </div>
+            
+            
+            <div class="service-card">
+                <span class="service-icon">🧘</span>
+                <h4>Dolor Crónico y Postural</h4>
+                <p>Abordamos dolores persistentes y corregimos malos hábitos posturales con planes de tratamiento personalizados.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

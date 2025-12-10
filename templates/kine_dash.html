@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %} 
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4 text-primary">👋 Dashboard del Kinesiólogo</h1>
+            {# Asumiendo que usas 'kinesiologo.perfil.nombre' si el usuario está logueado #}
+            <p class="lead">Bienvenido, {{ request.user.perfil.nombre }}. Aquí puedes gestionar tu agenda.</p>
+        </div>
+    </div>
+    
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">⏰ Gestión de Bloqueos</h5>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <p class="card-text">Bloquea tu tiempo por vacaciones, reuniones u otras actividades.</p>
+                    <a href="{% url 'citas:gestionar_bloqueos' %}" class="btn btn-sm btn-outline-warning mt-auto">
+                        Ver/Crear Bloqueos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">📅 Citas Pendientes de Revisión</h5>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    {% if citas_pendientes %}
+                        <p class="card-text">Tienes **{{ citas_pendientes.count }}** citas pendientes de confirmación/rechazo.</p>
+                        <a href="#citas-pendientes" class="btn btn-sm btn-outline-info mt-auto">Revisar Citas</a>
+                    {% else %}
+                        <p class="card-text">No tienes citas nuevas pendientes de revisión. ¡Agenda despejada!</p>
+                        <a href="#" class="btn btn-sm btn-outline-secondary mt-auto disabled">Todo al día</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <hr>
+
+    {# MODIFICACIÓN: Se añaden los botones de "Crear Nota" a las citas próximas #}
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3 class="text-success mb-3">🗓️ Tus Próximas Citas Confirmadas</h3>
+            
+            {% if citas_proximas %}
+                <ul class="list-group">
+                    {% for cita in citas_proximas %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong class="text-success">{{ cita.fecha_hora_inicio|date:"d M H:i" }}</strong> con {{ cita.paciente.perfil.nombre }} {{ cita.paciente.perfil.apellido }}
+                                <br><small>Motivo: {{ cita.motivo|default:"Sin especificar" }}</small>
+                            </div>
+                            {# COLUMNA DE ACCIÓN: Botón para CREAR NOTA #}
+                            <div>
+                                <span class="badge bg-success rounded-pill me-3">CONFIRMADA</span>
+                                <a href="{% url 'evaluaciones:crear_o_editar_nota_clinica' cita.pk %}" class="btn btn-sm btn-outline-success" title="Registrar Nota Clínica (SOAP)">
+                                    <i class="fas fa-file-medical"></i> Crear Nota
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-secondary">
+                    No tienes citas próximas confirmadas en tu agenda.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# NUEVA SECCIÓN: Historial de Citas Finalizadas (¡Aquí aparecerá tu Cita #9!) #}
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3 class="text-secondary mb-3">✅ Historial de Citas Finalizadas</h3>
+            
+            {% comment %} Asumimos que la lista viene en una variable llamada 'citas_finalizadas' en el contexto {% endcomment %}
+            {% if citas_finalizadas %}
+                <ul class="list-group">
+                    {% for cita in citas_finalizadas %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                            <div>
+                                <strong class="text-primary">{{ cita.fecha_hora_inicio|date:"d M Y H:i" }}</strong> con {{ cita.paciente.perfil.nombre }} {{ cita.paciente.perfil.apellido }}
+                                <br><small>Documentada: {{ cita.fecha_hora_inicio|date:"d M Y" }}</small>
+                            </div>
+                            
+                            {# COLUMNA DE ACCIÓN: Botones para VER y EDITAR la Nota Clínica #}
+                            <div>
+                                <span class="badge bg-secondary rounded-pill me-3">FINALIZADA</span>
+                                
+                                <a href="{% url 'evaluaciones:ver_nota_clinica' cita.pk %}" class="btn btn-sm btn-info me-2" title="Ver Nota Clínica (SOAP)">
+                                    <i class="fas fa-eye"></i> Ver Nota
+                                </a>
+                                
+                                <a href="{% url 'evaluaciones:crear_o_editar_nota_clinica' cita.pk %}" class="btn btn-sm btn-warning" title="Editar Nota Clínica">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info">
+                    Aún no tienes citas finalizadas registradas.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3 class="text-secondary mb-3">🔒 Próximos Bloqueos de Agenda</h3>
+            
+            {% if bloqueos %}
+                <ul class="list-group">
+                    {% for bloqueo in bloqueos %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                            <div>
+                                <strong class="text-danger">Bloqueado:</strong> {{ bloqueo.fecha_hora_inicio|date:"d M H:i" }} hasta {{ bloqueo.fecha_hora_fin|date:"H:i" }}
+                                <br><small>Motivo: {{ bloqueo.motivo|default:"Bloqueo personal" }}</small>
+                            </div>
+                            <span class="badge bg-danger rounded-pill">BLOQUEADO</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info">
+                    No tienes bloqueos futuros registrados. Tu agenda está completamente abierta.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

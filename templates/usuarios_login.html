@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Acceso Paciente{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos del Body y Background */
+    body {
+        background-color: white; 
+        min-height: 100vh;
+    }
+    .background-curve-login {
+        position: fixed; 
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40vh; 
+        background: linear-gradient(170deg, transparent 50%, #e0f7fa 50%); 
+        z-index: -1;
+    }
+
+    /* Estilos de la Tarjeta de Login */
+    .login-card {
+        max-width: 350px; 
+        width: 100%;
+        margin-top: 50px; 
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+        border: none;
+        border-radius: 12px;
+        background-color: white; 
+        z-index: 10;
+    }
+    
+    /* Botón Principal Kine */
+    .btn-kine-primary {
+        background-color: #00bcd4;
+        border-color: #00bcd4;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+    .btn-kine-primary:hover {
+        background-color: #0097a7; 
+        border-color: #0097a7;
+        color: white;
+    }
+    
+    /* Foco de Campos de Formulario */
+    .form-control:focus {
+        border-color: #00bcd4; 
+        box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.25); 
+    }
+
+    /* Enlaces Kine */
+    .link-kine {
+        color: #00bcd4;
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .link-kine:hover {
+        color: #0097a7;
+    }
+</style>
+
+
+<div class="background-curve-login"></div>
+
+<div class="d-flex justify-content-center">
+    <div class="card login-card p-4">
+        <div class="card-body">
+            
+            <h4 class="card-title text-center mb-4" style="color: #00bcd4;">Acceso de Paciente</h4>
+            
+            <p class="text-center text-muted mb-4 small">
+                Ingresa tu RUT y los últimos 4 dígitos de tu teléfono celular.
+            </p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    {# 🔑 SOLUCIÓN FINAL: Estilos en línea con !important para forzar el color verde de éxito #}
+                    <div class="alert alert-success" role="alert" style="
+                        background-color: #d4edda !important; 
+                        border-color: #c3e6cb !important; 
+                        color: #155724 !important; 
+                        font-weight: 500;
+                    "> 
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" action="{% url 'usuarios:autenticar_paciente' %}">
+                {% csrf_token %}
+                
+                
+                <div class="mb-3">
+                    <label for="id_rut" class="form-label">RUT:</label>
+                    <input type="text" name="rut" class="form-control" id="id_rut" required placeholder="Ej: 12.345.678-K">
+                </div>
+                
+                
+                <div class="mb-4">
+                    <label for="id_password" class="form-label">Clave (4 dígitos):</label>
+                    <input type="password" name="clave_celular" class="form-control" id="id_password" required maxlength="4" minlength="4">
+                </div>
+                
+                <button type="submit" class="btn btn-kine-primary w-100">Ingresar</button>
+                
+                <p class="text-center mt-3 small">
+                    <a href="{% url 'usuarios:registro_paciente' %}" class="link-kine">¿No tienes cuenta? Regístrate aquí</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

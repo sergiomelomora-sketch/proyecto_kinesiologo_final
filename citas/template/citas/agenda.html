@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agenda de Citas</title>
+</head>
+<body>
+    <h1>Agenda de Citas Próximas</h1>
+    <ul>
+        {% for cita in citas %}
+            <li>
+                Cita #{{ cita.pk }}: {{ cita.fecha_hora_inicio }} con {{ cita.kinesiologo }}
+                (<a href="{% url 'detalle_cita' cita.pk %}">Ver Detalle</a>)
+            </li>
+        {% empty %}
+            <li>No hay citas próximas agendadas.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

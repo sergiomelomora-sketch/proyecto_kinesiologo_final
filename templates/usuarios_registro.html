@@ -1,0 +1,92 @@
+{% extends "base.html" %} 
+
+{% block title %}Registro de Paciente{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>📝 Registro de Nuevo Paciente</h2>
+                    <p class="mb-0">Completa tus datos para agendar tu primera cita.</p>
+                </div>
+                <div class="card-body">
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Por favor, corrige los siguientes errores:
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>**{{ field.label }}**: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {% for message in messages %}
+                        <div class="alert alert-info" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <h4 class="mt-3">Datos de Contacto y Acceso</h4>
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.rut.label_tag }} 
+                                {{ form.rut }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.email.label_tag }} 
+                                {{ form.email }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.nombre.label_tag }} 
+                                {{ form.nombre }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.apellido.label_tag }} 
+                                {{ form.apellido }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.telefono.label_tag }} 
+                                {{ form.telefono }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.direccion.label_tag }} 
+                                {{ form.direccion }}
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4">Salud y Previsión</h4>
+                        <hr>
+                        
+                        <div class="mb-3">
+                            {{ form.prevision.label_tag }} 
+                            {{ form.prevision }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.antecedentes_medicos.label_tag }} 
+                            {{ form.antecedentes_medicos }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100 mt-3">Registrarse y Agendar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

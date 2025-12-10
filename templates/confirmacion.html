@@ -1,0 +1,53 @@
+{% extends 'base.html' %} 
+
+{% block title %}Cita Confirmada{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            
+            <div class="alert alert-success text-center py-4 shadow-lg" role="alert">
+                <h1 class="alert-heading display-4">✅ ¡Listo!</h1>
+                <p class="lead">Reservaste tu cita con éxito.</p>
+                <hr>
+                <p class="mb-0">Recibirás un email de confirmación y un recordatorio antes de la cita.</p>
+            </div>
+
+            <div class="card p-4 shadow-lg mb-4">
+                <h3 class="border-bottom pb-2 mb-3">Información de la Cita</h3>
+                
+                <div class="row">
+                    <div class="col-12 col-sm-6 mb-3">
+                        <strong>Kinesiólogo:</strong> {{ cita.kinesiologo }}
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <strong>Fecha:</strong> {{ cita.fecha_hora_inicio|date:"l, d M Y" }}
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <strong>Hora:</strong> {{ cita.fecha_hora_inicio|date:"H:i" }} hrs
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <strong>Duración:</strong> {{ cita.duracion_minutos }} minutos
+                    </div>
+                    <div class="col-12">
+                        <strong>Motivo:</strong> {{ cita.motivo|default:"(No especificado)" }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center p-3 border rounded bg-light text-secondary">
+                <p class="mb-0" style="font-size: 0.9rem;">
+                    **Importante:** Si necesitas cancelar, recuerda que solo puedes hacerlo hasta **12 horas antes** de tu cita. 
+                    Ingresa a la sección **'Revisar tu Hora'** en nuestra página para gestionarlo.
+                </p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'citas:agenda' %}" class="btn btn-primary btn-lg">Volver a la Agenda</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

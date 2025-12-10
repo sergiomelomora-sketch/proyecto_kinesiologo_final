@@ -1,0 +1,150 @@
+{% extends 'base.html' %} 
+
+{% block title %}Agendar Nueva Cita{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>🗓️ Nueva Cita (Modo Paciente)</h1>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Formulario de Agendamiento</h2>
+                </div>
+                <div class="card-body">
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="form-group mb-3">
+                            {{ form.kinesiologo.label_tag }}
+                            {{ form.kinesiologo }}
+                            <div class="text-danger">{{ form.kinesiologo.errors }}</div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="id_fecha">Fecha de la Cita</label>
+                            <input type="date" id="id_fecha" class="form-control" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Horarios Disponibles</label>
+                            <div id="horarios-container" class="mt-2">
+                                <p class="text-muted">Selecciona la fecha y el kinesiólogo para ver las horas.</p>
+                            </div>
+                        </div>
+
+                        <input type="hidden" 
+                               name="fecha_hora_inicio" 
+                               id="id_fecha_hora_inicio" 
+                               value="{{ form.fecha_hora_inicio.value|default:'' }}">
+                        
+                        <div class="text-danger">{{ form.fecha_hora_inicio.errors }}</div>
+                        
+                        <div class="form-group mb-4">
+                            {{ form.motivo.label_tag }}
+                            {{ form.motivo }}
+                            <div class="text-danger">{{ form.motivo.errors }}</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block">Agendar Cita</button>
+                        <a href="{% url 'citas:agenda' %}" class="btn btn-secondary">Volver a la Agenda</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    
+    
+    const fechaInput = document.getElementById('id_fecha');
+    const kinesiologoSelect = document.getElementById('id_kinesiologo');
+    const horariosContainer = document.getElementById('horarios-container');
+    const fechaHoraInicioInput = document.getElementById('id_fecha_hora_inicio'); 
+    
+    function cargarHorarios() {
+        const kinesiologoId = kinesiologoSelect.value;
+        const fecha = fechaInput.value;
+        
+        
+        if (!kinesiologoId || !fecha) {
+            horariosContainer.innerHTML = '<p class="text-muted">Selecciona la fecha y el kinesiólogo.</p>';
+            fechaHoraInicioInput.value = ''; 
+            return;
+        }
+
+        horariosContainer.innerHTML = '<p class="text-info">Cargando horarios...</p>';
+        
+        
+        fetch(`{% url 'citas:api_horarios' %}?kinesiologo_id=${kinesiologoId}&fecha=${fecha}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                let html = '';
+                if (data.error) {
+                    html = `<p class="text-danger">Error al cargar horarios: ${data.error}</p>`;
+                } else if (data.horarios.length === 0) {
+                    html = '<p class="text-warning">No hay horarios disponibles para esta fecha.</p>';
+                } else {
+                    data.horarios.forEach(horario => {
+                        
+                        html += `
+                            <button type="button" class="btn btn-outline-info btn-sm m-1 horario-btn" data-value="${horario.valor}">
+                                ${horario.hora}
+                            </button>
+                        `;
+                    });
+                }
+                horariosContainer.innerHTML = html;
+
+                
+                document.querySelectorAll('.horario-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        
+                        fechaHoraInicioInput.value = this.dataset.value; 
+                        
+                        
+                        document.querySelectorAll('.horario-btn').forEach(btn => btn.classList.remove('active', 'btn-primary'));
+                        this.classList.add('active', 'btn-primary');
+                        
+ 
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching:', error);
+                horariosContainer.innerHTML = '<p class="text-danger">Ocurrió un error de conexión o servidor.</p>';
+            });
+    }
+
+     
+    kinesiologoSelect.addEventListener('change', cargarHorarios);
+    fechaInput.addEventListener('change', cargarHorarios);
+
+    
+    
+    
+    cargarHorarios();
+</script>
+
+{% endblock %}
