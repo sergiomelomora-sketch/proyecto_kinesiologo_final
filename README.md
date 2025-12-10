@@ -9,4 +9,4 @@ Aquí está el tablero donde se gestionó el desarrollo del proyecto:
 
 🔗 Link al servidor: https://sergiobastiann.pythonanywhere.com/
 
-🔗 Link al usuario kinesiologo: http://127.0.0.1:8000/usuarios/kine/login/
+🔗 Link al usuario kinesiologo: https://sergiobastiann.pythonanywhere.com/usuarios/kine/login/
